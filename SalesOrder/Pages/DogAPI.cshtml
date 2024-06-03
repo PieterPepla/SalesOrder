@@ -1,0 +1,12 @@
+﻿@page
+@model SalesOrder.Pages.DogAPIModel
+@{
+}
+<div class="text-center">
+    <h1 class="display-4">@Model.dogApi.Status</h1>
+    <div class="row justify-content-center mt-3">
+        <div class="col-12 align-self-center">
+            <img src="@Model.dogApi.Message" />
+        </div>
+    </div>
+</div>

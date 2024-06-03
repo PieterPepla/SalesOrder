@@ -1,0 +1,52 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using SharedLibrary.Constants
+@model SalesOrder.Pages.AddUserModel
+@{
+}
+<div class="text-center">
+    <h1 class="display-4">Add User</h1>
+    @if (Model.messages.Count > 0)
+    {
+        @foreach (var message in Model.messages)
+        {
+            <div class="row justify-content-center mt-3">
+                <div class="col-12 mt-3">
+                    <p>@message</p>
+                </div>
+            </div>
+        }
+    }
+    <form asp-page="AddUser">
+        <div class="row justify-content-center mt-3">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label for="orderNumber">Username</label>
+                    <input type="text" class="form-control" asp-for="@Model.user.Username" value="@Model.user.Username" required>
+                    <span asp-validation-for="@Model.user.Username" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label for="orderNumber">Password</label>
+                    <input type="text" class="form-control" asp-for="@Model.user.Password" value="@Model.user.Password" required>
+                    <span asp-validation-for="@Model.user.Password" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 mt-3">
+                <div class="form-group">
+                    <select class="form-control" asp-for="@Model.user.Role">
+                        <option selected="selected" value="">Please select</option>
+                        <option value="@UserRole.Administrator">Administrator</option>
+                        <option value="@UserRole.Guest">Guest</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

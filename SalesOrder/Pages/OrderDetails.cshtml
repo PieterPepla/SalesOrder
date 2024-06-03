@@ -1,0 +1,99 @@
+﻿@page
+@using SalesOrder.Pages
+@using SharedLibrary.Enums
+@model SalesOrder.Pages.OrderDetailsModel
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="text-center">
+    <div class="row justify-content-center mt-3">
+        <div class="col-12 align-self-center">
+            <form asp-page="OrderDetails">
+                <input asp-for="@Model.order.Id" value="@Model.order?.Id" style="display:none" />
+                <div class="row">
+                    <div class="col-6">
+                        <h1>Order Header</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="orderNumber">Order Number</label>
+                            <input type="text" class="form-control" id="orderNumber" asp-for="@Model.order.OrderNumber" value="@Model.order.OrderNumber" required>
+                            <span asp-validation-for="@Model.order.OrderNumber" class="form-text text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="orderType">Order Type</label>
+                            <select class="form-control" id="orderType" asp-items="Html.GetEnumSelectList<OrderType>()" asp-for="@Model.order.OrderType" required>
+                                <option selected="selected" value="">Please select</option>
+                            </select>
+                            <span asp-validation-for="@Model.order.OrderType" class="form-text text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="orderStatus">Order Status</label>
+                            <select class="form-control" id="orderStatus" asp-items="Html.GetEnumSelectList<OrderStatus>()" asp-for="@Model.order.OrderStatus" required>
+                                <option selected="selected" value="">Please select</option>
+                            </select>
+                            <span asp-validation-for="@Model.order.OrderStatus" class="form-text text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name</label>
+                            <input type="text" class="form-control" id="customerName" asp-for="@Model.order.CustomerName" value="@Model.order?.CustomerName" required>
+                            <span asp-validation-for="@Model.order.CustomerName" class="form-text text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="dateCreated">Order create date and time</label>
+                            <input type="text" class="form-control" id="dateCreated" asp-for="@Model.order.DateCreated" value="@Model.order?.DateCreated" required />
+                            <span asp-validation-for="@Model.order.DateCreated" class="form-text text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h1>Order Lines</h1>
+                    </div>
+                </div>
+                <partial name="~/Pages/OrderLine.cshtml" model="new OrderLineModel(Model.order)" />
+                <div class="row">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $.datetimepicker.setLocale('en');
+            $('#dateCreated').datetimepicker();
+
+            $("#add-orderLine").on('click', function () {
+                var id = $("#order_Id").val();
+                $.ajax({
+                    type: "GET",
+                    url: "/OrderLine",
+                    data: { id: id },
+                    success: function (response) {
+                        console.log(response)
+                    },
+                    failure: function (response) {
+                        console.log(response);
+                    }
+                });
+            });
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

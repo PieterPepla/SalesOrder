@@ -1,0 +1,56 @@
+﻿@using SharedLibrary.Enums
+@model SalesOrder.Pages.OrderLineModel
+
+@foreach (var line in Model.order.OrderLine.Select((value, i) => new { i, value }))
+{
+    <div class="row mb-5">
+        <input asp-for="@Model.order.OrderLine[@line.i].Id" value="@line.value.Id" style="display:none" />
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="lineNumber">Line Number</label>
+                <input type="text" class="form-control" asp-for="@Model.order.OrderLine[@line.i].LineNumber" value="@line.value.LineNumber" readonly>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="productCode">Product Code</label>
+                <input type="text" class="form-control" asp-for="@Model.order.OrderLine[@line.i].ProductCode" value="@line.value.ProductCode">
+                <span asp-validation-for="@Model.order.OrderLine[@line.i].ProductCode" class="form-text text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="productType">Product Type</label>
+                <select class="form-control" id="productType" asp-items="Html.GetEnumSelectList<ProductType>()" asp-for="@Model.order.OrderLine[@line.i].ProductType">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                <span asp-validation-for="@Model.order.OrderLine[@line.i].ProductType" class="form-text text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="costPrice">Cost Price</label>
+                <input type="text" class="form-control" asp-for="@Model.order.OrderLine[@line.i].CostPrice" value="@line.value.CostPrice">
+                <span asp-validation-for="@Model.order.OrderLine[@line.i].CostPrice" class="form-text text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="salesPrice">Sales Price</label>
+                <input type="text" class="form-control" asp-for="@Model.order.OrderLine[@line.i].SalesPrice" value="@line.value.SalesPrice">
+                <span asp-validation-for="@Model.order.OrderLine[@line.i].SalesPrice" class="form-text text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" class="form-control" asp-for="@Model.order.OrderLine[@line.i].Quantity" value="@line.value.Quantity">
+                <span asp-validation-for="@Model.order.OrderLine[@line.i].Quantity" class="form-text text-danger"></span>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

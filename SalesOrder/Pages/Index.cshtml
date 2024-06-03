@@ -1,0 +1,33 @@
+﻿@page
+@using SharedLibrary.Enums
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Please Login</h1>
+    <form asp-page="Auth" method="POST">
+        <div class="row justify-content-center mt-3">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label for="@Model.auth.Username">Username/Email</label>
+                    <input type="text" class="form-control" asp-for="@Model.auth.Username" value="pietersteenekamp@steenekamp.net">
+                    <small id="@Model.auth.Username-help" class="form-text text-muted">Invalid.</small>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label for="@Model.auth.Password">Password</label>
+                    <input type="password" class="form-control" asp-for="@Model.auth.Password" value="Password@123">
+                    <small id="@Model.auth.Password-help" class="form-text text-muted">Invalid.</small>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

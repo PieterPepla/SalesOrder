@@ -1,0 +1,159 @@
+﻿@page
+@using SharedLibrary.Constants
+@using SharedLibrary.Enums
+@model SalesOrder.Pages.AuthModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <form asp-page="Orders">
+        <div class="row justify-content-center mt-3">
+            <div class="col-12 col-md-3">
+                <div class="form-group">
+                    <select class="form-control" asp-items="Html.GetEnumSelectList<OrderType>()" name="filter">
+                        <option selected="selected" value="">Please select</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row justify-content-center mt-3">
+        <div class="col-12 align-self-center">
+            <div class="row mb-2">
+                <div class="col fw-bold">
+                    @Html.DisplayNameFor(model => model.orders.FirstOrDefault().Id)
+                </div>
+                <div class="col fw-bold">
+                    @Html.DisplayNameFor(model => model.orders.FirstOrDefault().OrderNumber)
+                </div>
+                <div class="col fw-bold">
+                    @Html.DisplayNameFor(model => model.orders.FirstOrDefault().OrderType)
+                </div>
+                <div class="col fw-bold">
+                    @Html.DisplayNameFor(model => model.orders.FirstOrDefault().OrderStatus)
+                </div>
+                <div class="col fw-bold">
+                    @Html.DisplayNameFor(model => model.orders.FirstOrDefault().CustomerName)
+                </div>
+                <div class="col fw-bold">
+                    @Html.DisplayNameFor(model => model.orders.FirstOrDefault().DateCreated)
+                </div>
+                <div class="col fw-bold">
+                    Actions
+                </div>
+            </div>
+            @foreach (var order in Model.orders)
+            {
+                <div class="row mb-2">
+                    <div class="col">
+                        @Html.DisplayFor(modelItem => order.Id)
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(modelItem => order.OrderNumber)
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(modelItem => order.OrderType)
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(modelItem => order.OrderStatus)
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(modelItem => order.CustomerName)
+                    </div>
+                    <div class="col">
+                        @Html.DisplayFor(modelItem => order.DateCreated)
+                    </div>
+                    <div class="col">
+                        <a class='btn btn-tertiary onclick-show-spinner' onclick="ShowOrderLines('@order.Id')"><i class="bi bi-eye-fill"></i> Show Order Lines</a>
+                        @{
+                            if (User.IsInRole(UserRole.Administrator))
+                            {
+                                <div>
+                                    | <a class="btn btn-tertiary onclick-show-spinner" asp-page="OrderDetails" asp-route-id="@order.Id"><i class="bi bi-eye-fill"></i> Edit</a>
+                                    | <a class="btn btn-tertiary onclick-show-spinner" asp-page="Orders" asp-route-id="@order.Id"><i class="bi bi-eye-fill"></i> Delete</a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row mb-2" id="order-headers-@order.Id" style="display:none">
+                    <div class="col fw-bold">
+                        @Html.DisplayNameFor(modelItem => order.OrderLine.FirstOrDefault().LineNumber)
+                    </div>
+                    <div class="col fw-bold">
+                        @Html.DisplayNameFor(modelItem => order.OrderLine.FirstOrDefault().ProductCode)
+                    </div>
+                    <div class="col fw-bold">
+                        @Html.DisplayNameFor(modelItem => order.OrderLine.FirstOrDefault().ProductType)
+                    </div>
+                    <div class="col fw-bold">
+                        @Html.DisplayNameFor(modelItem => order.OrderLine.FirstOrDefault().CostPrice)
+                    </div>
+                    <div class="col fw-bold">
+                        @Html.DisplayNameFor(modelItem => order.OrderLine.FirstOrDefault().SalesPrice)
+                    </div>
+                    <div class="col fw-bold">
+                        @Html.DisplayNameFor(modelItem => order.OrderLine.FirstOrDefault().Quantity)
+                    </div>
+                    <div class="col fw-bold">
+                        Actions
+                    </div>
+                </div>
+                @foreach (var line in order.OrderLine)
+                {
+                    <div class="row order-details-@order.Id" style="display:none">
+                        <div class="col">
+                            @Html.DisplayFor(modelItem => line.LineNumber)
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(modelItem => line.ProductCode)
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(modelItem => line.ProductType)
+                        </div>
+                        <div class="col">
+                            R @Html.DisplayFor(modelItem => line.CostPrice)
+                        </div>
+                        <div class="col">
+                            R @Html.DisplayFor(modelItem => line.SalesPrice)
+                        </div>
+                        <div class="col">
+                            @Html.DisplayFor(modelItem => line.Quantity)
+                        </div>
+                        @* <div class="col">
+                            <a class='btn btn-tertiary onclick-show-spinner' asp-page="OrderLineDetails" asp-route-id="@line.Id"><i class="bi bi-eye-fill"></i> Edit</a> |
+                            <a class='btn btn-tertiary onclick-show-spinner'><i class="bi bi-eye-fill"></i> Delete</a>
+                        </div> *@
+                    </div>
+                }
+                @* <div class="row" id="order-add-@order.Id" style="display:none">
+                    <div class="col-12">
+                        <a class='btn btn-tertiary onclick-show-spinner' asp-page="OrderLineDetails"><i class="bi bi-eye-fill"></i> Add Line</a>
+                    </div>
+                </div> *@
+            }
+        </div>
+        <div class="col-12">
+            <a class='btn btn-tertiary onclick-show-spinner' asp-page="OrderDetails"><i class="bi bi-eye-fill"></i> Add Order</a>
+        </div>
+    </div>
+</div>
+
+<style scoped>
+
+</style>
+
+<script>
+    function ShowOrderLines(id) {
+        $("#order-headers-" + id).show();
+        $(".order-details-" + id).show();
+        $("#order-headers-" + id).show();
+        $("#order-add-" + id).css("margin-bottom", "30px").show();
+    }
+</script>
